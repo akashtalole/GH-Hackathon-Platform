@@ -14,7 +14,7 @@ permissions:
   id-token: write
 
 jobs:
-  generate-leaderboard:
+  build:
     runs-on: ubuntu-latest
     # Run on manual dispatch, schedule, or when bot marks an issue as evaluated
     if: >
@@ -55,6 +55,14 @@ jobs:
         with:
           path: docs/
 
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
